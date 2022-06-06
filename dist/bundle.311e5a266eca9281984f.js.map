@@ -1,0 +1,1 @@
+{"version":3,"file":"bundle.311e5a266eca9281984f.js","mappings":";;;;;AAAAA,OAAO,CAACC,GAAR,CAAY,OAAZ,E","sources":["webpack://bird_threejs/./src/index.js"],"sourcesContent":["console.log(\"hello\");\n"],"names":["console","log"],"sourceRoot":""}
