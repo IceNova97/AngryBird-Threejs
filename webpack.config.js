@@ -1,44 +1,62 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   mode: "development",
-  entry: path.join(__dirname, "src", "index"),
+  entry: path.resolve(__dirname, "./src/index.js"),
   watch: true,
   output: {
-    path: path.join(__dirname, "dist"),
-    publicPath: "/dist/",
-    filename: "bundle.js",
-    chunkFilename: "[name].js",
+    filename: "bundle.[contenthash].js",
+    path: path.resolve(__dirname, "./dist"),
   },
   module: {
     rules: [
       {
-        test: /.jsx?$/,
+        test: /\.jsx?$/,
         include: [path.resolve(__dirname, "src")],
         exclude: [path.resolve(__dirname, "node_modules")],
         loader: "babel-loader",
-        query: {
-          presets: [
-            [
-              "@babel/env",
-              {
-                targets: {
-                  browsers: "last 2 chrome versions",
-                },
-              },
-            ],
-          ],
-        },
+      },
+      {
+        test: /\.(html)$/,
+        use: ["html-loader"],
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssPlugin.loader, "css-loader"],
+      },
+      // Images
+      {
+        test: /\.(jpg|png|gif|svg)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "assets/images/",
+            },
+          },
+        ],
       },
     ],
   },
-  resolve: {
-    extensions: [".json", ".js", ".jsx"],
-  },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [{ from: path.resolve(__dirname, "./static") }],
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "./src/index.html"),
+      minify: true,
+    }),
+    new MiniCssPlugin(),
+  ],
   devtool: "source-map",
   devServer: {
     contentBase: path.join(__dirname, "/dist/"),
     inline: true,
     host: "localhost",
     port: 8080,
+    watchContentBase: true,
+    open: true,
   },
 };
