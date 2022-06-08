@@ -38,6 +38,12 @@ module.exports = {
           },
         ],
       },
+      // Shader
+      {
+        test: /\.glsl$/,
+        exclude: /node_modules/,
+        use: ['raw-loader']
+      }
     ],
   },
   plugins: [
